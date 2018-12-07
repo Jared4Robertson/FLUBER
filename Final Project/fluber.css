@@ -1,5 +1,23 @@
-#login_div{
-    height: 100vh;
-    width: 50vw;
+#Passenger_login_div{
+    height: 70vh;
+    width: 48vw;
+    float: left;
+    border-style: double;
+    text-align: center;
+
     
+}
+#Pilot_login_div{
+    height: 80vh;
+    width: 40vw;
+    float: right;
+    margin-right: 40px;
+    text-align: center;
+    background-image: url(https://image.freepik.com/free-vector/flat-design-plane-travel-background_23-2147639855.jpg);
+}
+#big{
+    text-align: center;
+}
+.center{
+    margin: auto;
 }
