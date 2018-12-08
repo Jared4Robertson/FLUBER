@@ -1,3 +1,4 @@
+var root_url ="http://comp426.cs.unc.edu:3001/"
 $(document).ready(()=>{
     $(document).on("click",".login_button",function(){
         build_login_page();
@@ -14,6 +15,10 @@ $(document).ready(()=>{
     $(document).on("click","#login_btn",function(){
         check_login();
       });
+    $(document).on("click","#Search_btn",function(){
+        show_results();
+      });
+
 })
 let login_name = "guest";
 let pilot_boolean = false;
@@ -67,8 +72,9 @@ function add_homepage(){
 }
 
 function add_passpage(){
-    if(!logged_in){
-
+    if(logged_in){
+        pilot_boolean=false;
+        add_pass_div();
     }
     else{
         pilot_boolean = false;
@@ -77,8 +83,9 @@ function add_passpage(){
 }
 
 function add_pilotpage(){
-    if(!logged_in){
-        add_base_div();
+    if(logged_in){
+        pilot_boolean=true;
+        add_pilot_div();
         
     }
     else{
@@ -88,7 +95,8 @@ function add_pilotpage(){
 }
 
 function add_loginpage(){
-    $('body').append('<div class="login_div">Log into to Fluber<br>\
+    $('body').append('<div class = "background_div3"></div>')
+    $('.background_div3').append('<div class="login_div">Log into to Fluber<br>\
     <input type="text" class = "textbox" id="login_user" placeholder = "Username"><br>\
     <input type="password" class = "textbox" id="login_pass" placeholder = "Password"><br>\
     <button id="login_btn">Log in</button>\
@@ -125,15 +133,73 @@ function check_login(){
     }
 }
 }
-function add_base_div(){
+function add_pilot_div(){
     
     $('body').append('<div class = background_div></div>');
     $('.background_div').append('<div class = base_div></div>');
-    $('.base_div').append('<div class="">Add to your schedule<br>\
-    <input type="text" class = "textbox searchbox"  placeholder = "Flying From">\
-    <input type="text" class = "textbox searchbox"  placeholder = "Flying To"><br>\
-    <input type = "date" class = textbox searchbox" placeholder = "Departure"><br>\
+    $('.base_div').append('<div class="">\
+    <div class = "title">Add to your schedule</div><br>\
+    <input type="text" class = "textbox searchbox" id="from" placeholder = "Flying From">\
+    <input type="text" class = "textbox searchbox" id = "to"  placeholder = "Flying To"><br>\
+    <input type="date" class = "textbox searchbox" id = "departure" placeholder = "Departure"><br>\
     <button id="Search_btn">Search</button>\
     <div id ="mesg_div"</div>\
   </div>')
+}
+function add_pass_div(){
+    $('body').append('<div class = background_div2></div>');
+    $('.background_div2').append('<div class = base_div></div>');
+    $('.base_div').append('<div class="">\
+    <div class = "title">Find a flight</div><br>\
+    <input type="text" class = "textbox searchbox" id="from" placeholder = "Flying From">\
+    <input type="text" class = "textbox searchbox" id = "to" placeholder = "Flying To"><br>\
+    <input type="date" class = "textbox searchbox" id = "departure" placeholder = "Departure"><br>\
+    <button id="Search_btn">Search</button>\
+    <div id ="mesg_div"</div>\
+  </div>')
+}
+function show_results(){
+    let body;
+    let from = $('#from').val();
+    let to = $('#to').val();
+    let departure = $('#departure').val();
+
+    $.ajax(root_url + 'sessions',
+	       {
+		   type: 'POST',
+           xhrFields: {withCredentials: true},
+           data:{
+		   "user": {
+		       username: "jaredrob",
+		       password: "730093312"
+           }
+        },
+		   success: () => {
+           },
+		   error: () => {
+		       alert('error');
+		   }
+           });
+
+    $.ajax(root_url + 'instances?filter[date]='+departure,
+	       {
+		   type: 'GET',
+           xhrFields: {withCredentials: true},
+           data:{
+        },
+		   success: (response) => {
+               alert(response);
+           },
+		   error: () => {
+		       alert('error');
+		   }
+           });
+    if (pilot_boolean){
+        body = $(".background_div");
+    }
+    else{
+        body = $(".background_div2");
+    }
+    body.empty();
+
 }
