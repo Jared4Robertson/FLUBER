@@ -174,10 +174,12 @@ function add_pilot_div(){
     <div class = "title">Create and Captain a Flight</div><br>\
     <input type="text" class = "textbox searchbox" id="from" placeholder = "Flying From">\
     <input type="text" class = "textbox searchbox" id = "to"  placeholder = "Flying To"><br>\
-    <input type="time" class = "textbox searchbox" id = "departure">\
+    <input type="time" class = "textbox searchbox d_time" id = "departure">\
     <text class="depart_text">- Departure Time</text><br>\
-    <input type="time" class = "textbox searchbox" id = "arrival">\
+    <input type="time" class = "textbox searchbox a_time" id = "arrival">\
     <text class="depart_text">- Arrival Time</text><br>\
+    <input type="date" class = "textbox searchbox d_date" id = "date">\
+    <text class="depart_text">- Date</text><br>\
     <button id="Search_btn">Create</button>\
     <div id ="mesg_div"</div>\
   </div>')
@@ -238,5 +240,9 @@ function autocomplete_airport(){
 }}}
 
 function create_pilot_shit() {
-
+    let d_time = $('.d_time')[0].value;
+    let a_time = $('.a_time')[0].value;
+    let d_date = $('.d_date')[0].value;
+    alert(d_date);
+    
 }
