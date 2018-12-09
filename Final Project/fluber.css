@@ -16,9 +16,6 @@
     text-decoration: none;
     font-size: 17px;
 }  
-#navbar_div.login a {
-    float: right;
-}  
 /* Change the color of links on hover */
 #navbar_div a:hover {
     background-color: #ddd;
