@@ -198,7 +198,7 @@ function add_pass_div(){
     <input type="date" class = "textbox searchbox" id = "departure" placeholder = "Departure"><br>\
     <button id="Search_btn">Search</button>\
     <div id ="mesg_div"</div>\
-  </div>')
+  </div>');
   autocomplete(document.getElementById("from"), airport_names);
   autocomplete(document.getElementById("to"), airport_names);
 
