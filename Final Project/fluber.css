@@ -124,7 +124,19 @@ body{
 #mesg_div{
     font-size: 20px;
 }
-.base_div{
+.base_div_pilot{
+    width: 70%;
+    height: 60vh;
+    margin:auto;
+    background-color: black;
+    border-top-width: 30px;
+    border-radius: 10px;
+    opacity: .8;
+    text-align: left;
+    Color: white;
+    
+}
+.base_div_passenger{
     width: 70%;
     height: 50vh;
     margin:auto;
@@ -186,4 +198,8 @@ body{
     height: 90vh;
     background-image: url(https://www.smartertravel.com/uploads/2013/09/air-two_planes_one_parked_another_taking_off-1000x500.jpg);
     background-size: 100% 100%;
+}
+.depart_text{
+    margin-left: 25px;
+    margin-right: 25px;
 }

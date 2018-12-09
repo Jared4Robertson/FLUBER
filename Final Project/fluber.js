@@ -1,5 +1,6 @@
 var root_url ="http://comp426.cs.unc.edu:3001/"
 var airports;
+var flight_num = 420;
 $(document).ready(()=>{
     $(document).on("click",".login_button",function(){
         build_login_page();
@@ -83,8 +84,8 @@ function build_login_page(){
 function add_navbar(){
     $('body').append('<div id="navbar_div">\
     <a class = "home_button">FLUBER</a>\
-    <a class = "pilot_log">Pilot</a>\
     <a class = "pass_log">Passenger</a>\
+    <a class = "pilot_log">Pilot</a>\
     <a class = "login_button">'+log_label+'</a>\
     <a class = "user">'+login_name+'</a>\
 </div>')
@@ -168,20 +169,23 @@ function check_login(){
 function add_pilot_div(){
     
     $('body').append('<div class = background_div></div>');
-    $('.background_div').append('<div class = base_div></div>');
-    $('.base_div').append('<div class="">\
-    <div class = "title">Add to your schedule</div><br>\
+    $('.background_div').append('<div class = base_div_pilot></div>');
+    $('.base_div_pilot').append('<div class="">\
+    <div class = "title">Create and Captain a Flight</div><br>\
     <input type="text" class = "textbox searchbox" id="from" placeholder = "Flying From">\
     <input type="text" class = "textbox searchbox" id = "to"  placeholder = "Flying To"><br>\
-    <input type="date" class = "textbox searchbox" id = "departure" placeholder = "Departure"><br>\
-    <button id="Search_btn">Search</button>\
+    <input type="time" class = "textbox searchbox" id = "departure">\
+    <text class="depart_text">- Departure Time</text><br>\
+    <input type="time" class = "textbox searchbox" id = "arrival">\
+    <text class="depart_text">- Arrival Time</text><br>\
+    <button id="Search_btn">Create</button>\
     <div id ="mesg_div"</div>\
   </div>')
 }
 function add_pass_div(){
     $('body').append('<div class = background_div2></div>');
-    $('.background_div2').append('<div class = base_div></div>');
-    $('.base_div').append('<div class="">\
+    $('.background_div2').append('<div class = base_div_passenger></div>');
+    $('.base_div_passenger').append('<div class="">\
     <div class = "title">Find a flight</div><br>\
     <input type="text" class = "textbox searchbox" id="from" placeholder = "Flying From">\
     <input type="text" class = "textbox searchbox" id = "to" placeholder = "Flying To"><br>\
@@ -232,3 +236,7 @@ function autocomplete_airport(){
         /*check if the item starts with the same letters as the text field value:*/
         if (airports[i][1].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
 }}}
+
+function create_pilot_shit() {
+
+}
