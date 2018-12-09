@@ -21,9 +21,6 @@ $(document).ready(()=>{
     $(document).on("click","#Search_btn",function(){
         show_results();
       })
-    //$(document).on("input",".searchbox",function(){
-     //   autocomplete_airport();
-   // })
       $.ajax(root_url + 'sessions',
       {
       type: 'POST',
@@ -187,6 +184,8 @@ function add_pilot_div(){
     <button id="Search_btn">Create</button>\
     <div id ="mesg_div"</div>\
   </div>')
+  autocomplete(document.getElementById("from"), airport_names);
+  autocomplete(document.getElementById("to"), airport_names);
 }
 function add_pass_div(){
     $('body').append('<div class = background_div2></div>');
@@ -204,26 +203,45 @@ function add_pass_div(){
 
 }
 function show_results(){
+    let flight;
     if(pilot_boolean){
         create_pilot_shit()
     }
     else{
+    
     let body;
     let from = $('#from').val();
     let to = $('#to').val();
     let departure = $('#departure').val();
-    let instances;
-    let departure_id = 157225;
-    let arrival_id =157246;
+    
+    let is_date=(!departure=="")
+    for(i=0;i<airports.length;i++){
+         if(airport_names[i].toUpperCase()==to.toUpperCase()){
+             to_id =airports[i].id;
+         }
+         if(airport_names[i].toUpperCase()==from.toUpperCase()){
+            from_id =airports[i].id;
+        }
+        }
 
-    $.ajax(root_url + '/flights?filter[departure_id]='+departure_id+'&filter[arrival_id]='+arrival_id,
+    $.ajax(root_url + '/flights?filter[departure_id]='+from_id+'&filter[arrival_id]='+to_id,
 	       {
 		   type: 'GET',
            xhrFields: {withCredentials: true},
 		   success: (response) => {
-               instances=response;
-               alert(instances);
-           },
+               flight=response;
+               if(is_date){
+               for(i=0;i<airports;i++){
+               if(!flight[i].departs_at.slice(0,10)==departure){
+                    flight.remove(flight[i]);
+               }
+               console.log(flight);
+               }
+           }
+           console.log(flight.length);
+           fill_div(flight);
+
+        },
 		   error: () => {
 		       alert('error');
 		   }
@@ -235,15 +253,16 @@ function show_results(){
         body = $(".background_div2");
     }
     body.empty();
+    function fill_div(flight){
+        body.append('<div id="flight_Title">Click to book</div>');
+        body.append('<div id="flight_div_holder"></div>');
+        for(let i=0;i<flight.length;i++){
+            $('#flight_div_holder').append('<div id ="'+flight[i].id+'"class="flight_div">'+flight[i].number+'</div>');
+        }
+    }
 
 }
 }
-//function autocomplete_airport(){
-  //  alert(airports[0].name)
-    //input = $(event.target.val());
-    //autocomplete(input,airport_names);
-     
-//}
 
 function create_pilot_shit() {
     let d_time = $('.d_time')[0].value;
@@ -268,16 +287,17 @@ function autocomplete(inp, arr) {
         a.setAttribute("id", this.id + "autocomplete-list");
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
-        this.parentNode.appendChild(a);
+        $(this).after(a);
         /*for each item in the array...*/
         for (i = 0; i < arr.length; i++) {
           /*check if the item starts with the same letters as the text field value:*/
-          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          if (arr[i].toUpperCase().indexOf(val.toUpperCase())> -1) {
             /*create a DIV element for each matching element:*/
             b = document.createElement("DIV");
             /*make the matching letters bold:*/
-            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-            b.innerHTML += arr[i].substr(val.length);
+            b.innerHTML = arr[i].substr(0,arr[i].toUpperCase().indexOf(val.toUpperCase()));
+            b.innerHTML += "<strong>" + arr[i].substr(arr[i].toUpperCase().indexOf(val.toUpperCase()), val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(arr[i].toUpperCase().indexOf(val.toUpperCase())+val.length);
             /*insert a input field that will hold the current array item's value:*/
             b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
             /*execute a function when someone clicks on the item value (DIV element):*/
