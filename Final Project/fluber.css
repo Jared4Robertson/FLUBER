@@ -203,3 +203,34 @@ body{
     margin-left: 25px;
     margin-right: 25px;
 }
+
+
+
+  
+  .autocomplete-items div {
+    color: saddlebrown;  
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+  }
+  .autocomplete-items{
+    width: 26vw;
+    height: auto;
+    position: absolute;
+    top: 39.5vh;
+    left: 16.2vw;
+  }
+  
+  .autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9; 
+
+  }
+  
+  .autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important; 
+    color: #ffffff; 
+  }
+   
