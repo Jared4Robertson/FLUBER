@@ -160,6 +160,8 @@ body{
     background-color: #ddd;
 }
 .searchbox{
+    width: 20vw;
+    height: 7vh;
     margin-right: 25px;
     margin-left: 25px;
     padding-left: 10px;
