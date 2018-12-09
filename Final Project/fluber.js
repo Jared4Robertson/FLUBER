@@ -1,4 +1,5 @@
 var root_url ="http://comp426.cs.unc.edu:3001/"
+var airports;
 $(document).ready(()=>{
     $(document).on("click",".login_button",function(){
         build_login_page();
@@ -18,6 +19,34 @@ $(document).ready(()=>{
     $(document).on("click","#Search_btn",function(){
         show_results();
       });
+      $.ajax(root_url + 'sessions',
+      {
+      type: 'POST',
+      xhrFields: {withCredentials: true},
+      data:{
+      "user": {
+          username: "jaredrob",
+          password: "730093312"
+      }
+   },
+      success: () => {
+      },
+      error: () => {
+          alert('error');
+      }
+      });
+      $.ajax(root_url + '/airports',
+      {
+      type: 'GET',
+      xhrFields: {withCredentials: true},
+      success: (response) => {
+          airports=response;
+      },
+      error: () => {
+          alert('error');
+      }
+      });
+
 
 })
 let login_name = "guest";
@@ -72,7 +101,7 @@ function add_homepage(){
 }
 
 function add_passpage(){
-    if(logged_in){
+    if(!logged_in){
         pilot_boolean=false;
         add_pass_div();
     }
@@ -83,7 +112,7 @@ function add_passpage(){
 }
 
 function add_pilotpage(){
-    if(logged_in){
+    if(!logged_in){
         pilot_boolean=true;
         add_pilot_div();
         
@@ -163,32 +192,17 @@ function show_results(){
     let from = $('#from').val();
     let to = $('#to').val();
     let departure = $('#departure').val();
+    let instances;
+    let departure_id = 157225;
+    let arrival_id =157246;
 
-    $.ajax(root_url + 'sessions',
-	       {
-		   type: 'POST',
-           xhrFields: {withCredentials: true},
-           data:{
-		   "user": {
-		       username: "jaredrob",
-		       password: "730093312"
-           }
-        },
-		   success: () => {
-           },
-		   error: () => {
-		       alert('error');
-		   }
-           });
-
-    $.ajax(root_url + 'instances?filter[date]='+departure,
+    $.ajax(root_url + '/flights?filter[departure_id]='+departure_id+'&filter[arrival_id]='+arrival_id,
 	       {
 		   type: 'GET',
            xhrFields: {withCredentials: true},
-           data:{
-        },
 		   success: (response) => {
-               alert(response);
+               instances=response;
+               alert(instances);
            },
 		   error: () => {
 		       alert('error');
