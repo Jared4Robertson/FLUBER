@@ -18,7 +18,10 @@ $(document).ready(()=>{
       });
     $(document).on("click","#Search_btn",function(){
         show_results();
-      });
+      })
+    $(document).on("input",".searchbox",function(){
+        autocomplete_airport();
+    })
       $.ajax(root_url + 'sessions',
       {
       type: 'POST',
@@ -222,3 +225,10 @@ function show_results(){
 
 }
 }
+function autocomplete_airport(){
+    alert(airports[1].text())
+    input = $(event.target).val();
+    for (i = 0; i < airports.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (airports[i][1].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+}}}
