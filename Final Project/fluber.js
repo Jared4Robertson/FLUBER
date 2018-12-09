@@ -188,6 +188,10 @@ function add_pass_div(){
   </div>')
 }
 function show_results(){
+    if(pilot_boolean){
+        create_pilot_shit()
+    }
+    else{
     let body;
     let from = $('#from').val();
     let to = $('#to').val();
@@ -216,4 +220,5 @@ function show_results(){
     }
     body.empty();
 
+}
 }
