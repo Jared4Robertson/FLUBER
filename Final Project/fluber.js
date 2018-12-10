@@ -3,6 +3,9 @@ var airports;
 var airport_names = [];
 var flight_num = 420;
 var login_name;
+var First_Name;
+var Last_Name;
+var age;
 $(document).ready(()=>{
     $(document).on("click",".login_button",function(){
         build_login_page();
@@ -113,7 +116,7 @@ function add_homepage(){
 }
 
 function add_passpage(){
-    if(!logged_in){
+    if(logged_in){
         pilot_boolean=false;
         add_pass_div();
     }
@@ -124,7 +127,7 @@ function add_passpage(){
 }
 
 function add_pilotpage(){
-    if(!logged_in){
+    if(logged_in){
         pilot_boolean=true;
         add_pilot_div();
         
@@ -151,6 +154,9 @@ function check_login(){
         if(pass.toLowerCase()=="730093312"){
             login_name="Jared";
             logged_in = true;
+            first_name = "Jared";
+            last_name ="Robertson";
+            age=21;
 
         }
     }
@@ -158,6 +164,9 @@ function check_login(){
         if(pass.toLowerCase()=="730093313"){
             login_name="Tin";
             logged_in=true;
+            first_name = "Austin";
+            last_name ="Redenbaugh";
+            age=20;
         }
     }
     else{
@@ -487,5 +496,27 @@ function autocomplete(inp, arr) {
   }
 
   function book_flight(flight_div){
-    
+    $.ajax(root_url + '/tickets',
+    {
+    type: 'POST',
+    xhrFields: {withCredentials: true},
+    data:{
+            "ticket": {
+              "first_name":   first_name,
+              "middle_name":  "",
+              "last_name":    last_name,
+              "age":          age,
+              "gender":       "male",
+              "is_purchased":  true,
+              "price_paid":   "290.11",
+            },
+    success: (response) => {
+        alert("it worked")
+     },
+
+ },
+    error: () => {
+        alert('error');
+    }
+});
   }
