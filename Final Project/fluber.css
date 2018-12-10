@@ -201,6 +201,13 @@ body{
     padding-left: 50px;
     font-size: 50px;
 }
+.title2{
+    margin: auto;
+    color: blue;
+    padding-top:50px;
+    padding-left: 50px;
+    font-size: 30px;
+}
 .background_div2{
     padding-top: 50px;
     width: 100%;
