@@ -8,14 +8,29 @@
             <meta charset="utf-8">
             <script src="http://www.cs.unc.edu/~kmp/comp426fall18/jquery-3.3.1.js"></script>
             <script src = "fluber.js"></script>
+            <script src="https://connect.soundcloud.com/sdk/sdk-3.3.1.js"></script>
+            <script>
+            SC.initialize({
+              client_id: 'YOUR_CLIENT_ID'
+            });
+            
+            var track_url = 'http://soundcloud.com/forss/flickermood';
+            SC.oEmbed(track_url, { auto_play: true }).then(function(oEmbed) {
+              console.log('oEmbed response: ', oEmbed);
+            });
+            </script>
+            
             
         </head>
         
         <body>
+              
+
             <div id="navbar_div">
                 <a class = "home_button">FLUBER</a>
                 <a class = "pass_log">Passenger</a>
                 <a class = "pilot_log">Pilot</a>
+
                 <a class = "login_button">Log in</a>
                 <a class = "user">guest</a>
             </div>

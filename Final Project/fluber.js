@@ -5,8 +5,11 @@ var flight_num = 420;
 var login_name;
 var First_Name;
 var Last_Name;
+var instances;
 var age;
 $(document).ready(()=>{
+    //PPKtPqkDVIQU9L3e4CnYvPpzTXejjpZI
+    // widget1 === widget2
     $(document).on("click",".login_button",function(){
         build_login_page();
       });
@@ -151,7 +154,7 @@ function check_login(){
     let user = $('#login_user').val();
     let pass = $('#login_pass').val();
     if(user.toLowerCase()=="jaredrob"){
-        if(pass.toLowerCase()=="730093312"){
+        if(pass.toLowerCase()=="7"){
             login_name="Jared";
             logged_in = true;
             first_name = "Jared";
@@ -249,14 +252,10 @@ function show_results(){
                flight=response;
                if(is_date){
                    b=flight.length;
-               for(i=0;i<b;i++){
-                   a = flight.shift();
-               if(a.departs_at.slice(0,10)==departure){
-                    flight.push(a);
-               }
-               }
+               date_filter(flight);
            }
-           fill_div(flight);
+           else{
+           fill_div(flight);}
 
         },
 		   error: () => {
@@ -270,13 +269,45 @@ function show_results(){
         body = $(".background_div2");
     }
     body.empty();
+    function date_filter(flight){
+        let realflight=[];
+        $.ajax(root_url + '/instances?filter[date]='+departure,
+	       {
+		   type: 'GET',
+           xhrFields: {withCredentials: true},
+		   success: (response) => {
+               instances=response;
+               let instances_id=[];
+               
+               for(j=0;j<instances.length;j++){
+                   instances_id.push(instances[j].flight_id)
+               }
+               for(k=0;k<flight.length;k++){
+                if(instances_id.includes(flight[k].id)){
+                    realflight.push(flight[k]);
+                   
+
+                }
+            }
+            fill_div(realflight);
+               
+               
+    
+
+        },
+		   error: () => {
+		       alert('error');
+		   }
+           });
+
+    }
     function fill_div(flight){
         body.append('<div id="flight_Title">Book Your Flight...</div>');
         body.append('<div id="flight_div_holder"></div>');
         for(let i=0;i<flight.length;i++){
             $('#flight_div_holder').append('<div id ="'+flight[i].id+'"class="flight_div" flight='+flight[i]+'></div>');
             $('#'+flight[i].id).append('<div id ="number'+flight[i].id+'"class="flight_number_div">Flight Number: '+flight[i].number+'</div>');
-            let date = flight[i].departs_at.slice(5,7)+"/"+flight[i].departs_at.slice(8,10)+"/"+flight[i].departs_at.slice(2,4);
+            let date = departure.slice(5,7)+"/"+departure.slice(8,10)+"/"+departure.slice(2,4);
             $('#'+flight[i].id).append('<div id ="Date'+flight[i].id+'"class="flight_date_div">'+date+'</div>');
             
             let depart_from = flight[i].departure_id;
