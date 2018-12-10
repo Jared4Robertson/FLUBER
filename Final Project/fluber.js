@@ -300,7 +300,6 @@ function create_pilot_shit() {
                 "info": login_name
             },
 		   success: (response) => {
-               alert("it worked: " + d_id + ' ' + a_id);
                create_confirm_pilot_flight_div();
             },
 
