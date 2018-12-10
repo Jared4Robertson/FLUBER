@@ -6,6 +6,7 @@ var login_name;
 var First_Name;
 var Last_Name;
 var instances;
+var flights;
 var age;
 $(document).ready(()=>{
     //PPKtPqkDVIQU9L3e4CnYvPpzTXejjpZI
@@ -33,39 +34,51 @@ $(document).ready(()=>{
       })
     $(document).on("click",".flight_div",function(){
         book_flight(this);
-      })  
-      $.ajax(root_url + 'sessions',
-      {
-      type: 'POST',
-      xhrFields: {withCredentials: true},
-      data:{
-      "user": {
-          username: "jaredrob",
-          password: "730093312"
-      }
-   },
-      success: () => {
-      },
-      error: () => {
-          alert('error');
-      }
-      });
-      $.ajax(root_url + '/airports',
-      {
-      type: 'GET',
-      xhrFields: {withCredentials: true},
-      success: (response) => {
-          airports=response;
-          for(i=0;i<airports.length;i++){
-              airport_names.push(airports[i].name);
-          }
-      },
-      error: () => {
-          alert('error');
-      }
-      });
-
-
+    })  
+    $.ajax(root_url + 'sessions',
+    {
+        type: 'POST',
+        xhrFields: {withCredentials: true},
+        data:{
+        "user": {
+            username: "jaredrob",
+            password: "730093312"
+        }
+        },
+        success: () => {
+        },
+        error: () => {
+            alert('error');
+        }
+    });
+    $.ajax(root_url + '/airports',
+    {
+        type: 'GET',
+        xhrFields: {withCredentials: true},
+        success: (response) => {
+            airports=response;
+            for(i=0;i<airports.length;i++){
+                airport_names.push(airports[i].name);
+            }
+        },
+        error: () => {
+            alert('error');
+        }
+    });
+    $.ajax(root_url + '/flights',
+    {
+        type: 'GET',
+        xhrFields: {withCredentials: true},
+        success: (response) => {
+            flights=response;
+            // for(i=0;i<flights.length;i++){
+            //     airport_names.push(airports[i].name);
+            // }
+        },
+        error: () => {
+            alert('error');
+        }
+    });
 })
 login_name = "guest";
 let pilot_boolean = false;
@@ -357,6 +370,7 @@ function create_pilot_shit() {
     let arrive_to = document.getElementById("to").value;
     let d_id = 0;
     let a_id = 0;
+    let bool = false;
 
     for(i=0;i<airports.length;i++){
         if(airport_names[i].toUpperCase()==arrive_to.toUpperCase()){
@@ -367,7 +381,36 @@ function create_pilot_shit() {
         }
     }
 
-    $.ajax(root_url + '/flights',
+    for (i=0; i<flights.length; i++) {
+        if (flights[i].departs_at == d_time &&
+            flights[i].arrives_at == a_time &&
+            flights[i].departure_id == d_id &&
+            flights[i].arrival_id == a_id) {
+                bool = true;
+        }
+    }
+
+    if (bool) {
+        alert('flight already exists');
+        $.ajax(root_url + '/intances',
+	        {
+		    type: 'POST',
+            xhrFields: {withCredentials: true},
+            data:{
+            "instance": {
+                "flight_id": flight_num,
+                "date": d_date
+            },
+		    success: (response) => {
+            create_confirm_pilot_flight_div();
+            },
+        },
+		   error: () => {
+		       alert('this error');
+		   }
+        });
+    } else {
+        $.ajax(root_url + '/flights',
 	       {
 		   type: 'POST',
            xhrFields: {withCredentials: true},
@@ -378,7 +421,7 @@ function create_pilot_shit() {
                 "number":       flight_num,
                 "departure_id": d_id,
                 "arrival_id":   a_id,
-                "info": login_name
+                "info": "Captain " + login_name
             },
 		   success: (response) => {
                create_confirm_pilot_flight_div();
@@ -386,21 +429,35 @@ function create_pilot_shit() {
 
         },
 		   error: () => {
-		       alert('error');
+		       alert('that error');
 		   }
-    });
-
-
-    
+        });
+        $.ajax(root_url + '/instances',
+	        {
+		    type: 'POST',
+            xhrFields: {withCredentials: true},
+            data:{
+            "instance": {
+                "flight_id": flight_num,
+                "date": d_date
+            }
+            },
+		    success: (response) => {
+            },
+		    error: () => {
+		        alert('those error');
+		    }
+        });
+    }
 }
 
 function create_confirm_pilot_flight_div() {
     let d_pid = "ABC";
     let a_pid = "123";
-    let d_lat = 0;
-    let d_long = 0;
-    let a_lat = 0;
-    let a_long = 0;
+    // let d_lat = 0;
+    // let d_long = 0;
+    // let a_lat = 0;
+    // let a_long = 0;
     let d_time = $('.d_time')[0].value;
     let a_time = $('.a_time')[0].value;
     let d_date = $('.d_date')[0].value;
@@ -409,16 +466,15 @@ function create_confirm_pilot_flight_div() {
     for(i=0;i<airports.length;i++){
         if(airport_names[i].toUpperCase()==arrive_to.toUpperCase()){
             a_pid = airports[i].code;
-            a_lat = airports[i].latitude;
-            a_long = airports[i].longitude;
+            // a_lat = airports[i].latitude;
+            // a_long = airports[i].longitude;
         }
         if(airport_names[i].toUpperCase()==depart_from.toUpperCase()){
             d_pid = airports[i].code;
-            d_lat = airports[i].latitude;
-            d_long = airports[i].longitude;
+            // d_lat = airports[i].latitude;
+            // d_long = airports[i].longitude;
         }
     }
-    alert("lat: "+a_lat + ',  long: ' + a_long);
     body = $(".background_div");
     body.empty();
     $('body').append('<div class = background_div></div>');
