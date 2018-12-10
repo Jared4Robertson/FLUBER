@@ -269,6 +269,7 @@ body{
         overflow: auto;
   }
   #flight_div_holder{
+       
       height: 70%;
       overflow: Auto;
       width:88vw;
@@ -281,20 +282,46 @@ body{
       border-top-right-radius: 0;
       border-top-width: 0;
       scrollbar-track-color: black;
+      text-align: center;
   }
   #flight_Title{
-      padding-left: 5vw;
-      padding-top:4vh;
-      font-size: 50px;
+      text-align: center;
+
+      padding-top:3vh;
+      font-size: 70px;
       margin: auto;
-      width:100vw;
+      width:78vw;
       height:10vh;
-      background-color:white;
       color: black;
-      opacity: .8;
+      opacity: .9;
       border-radius:3px;
+      font-weight: bold;
 
   }
   ::-webkit-scrollbar {
     color: rgba(0, 0, 0, 0.815);
   }
+  .flight_number_div{
+    padding-top:8vh;
+      width:25vw;
+      height: 10vh;
+      font-size: 25px;
+      margin:0;
+      float: left;
+  }
+  .flight_date_div{
+    padding-top:8vh;
+    width:25vw;
+    height: 10vh;
+    font-size: 25px;
+    margin:0;
+    float: left;
+}
+.flight_time_div{
+    padding-top:8vh;
+    width:25vw;
+    height: 10vh;
+    font-size: 25px;
+    float: left;
+    margin:0;
+}

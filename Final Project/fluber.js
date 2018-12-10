@@ -21,6 +21,9 @@ $(document).ready(()=>{
     $(document).on("click","#Search_btn",function(){
         show_results();
       })
+    $(document).on("click",".flight_div",function(){
+        book_flight(this);
+      })  
       $.ajax(root_url + 'sessions',
       {
       type: 'POST',
@@ -94,7 +97,7 @@ function add_navbar(){
 
 function add_homepage(){
     $('body').append( $('body').append('<div id="Passenger_login_div"> \
-    <div class = "Advertisement"><br>Fly the way <br> you want</div>\
+    <div class = "Advertisement"><br>Fly The Way <br> You Want</div>\
         <div class="button_holder1">Find and Book a Flight<br><br><br><br> \
         <div class = "blue_button pass_log">Passenger</div></div>\
         <div class = "button_holder2">Captain an Aircraft<br><br><br><br>\
@@ -191,7 +194,7 @@ function add_pass_div(){
     $('body').append('<div class = background_div2></div>');
     $('.background_div2').append('<div class = base_div_passenger></div>');
     $('.base_div_passenger').append('<div class="">\
-    <div class = "title">Find a flight</div><br>\
+    <div class = "title">Find a Flight</div><br>\
     <input type="text" class = "textbox searchbox" id="from" placeholder = "Flying From">\
     <input type="text" class = "textbox searchbox" id = "to" placeholder = "Flying To"><br>\
     <input type="date" class = "textbox searchbox" id = "departure" placeholder = "Departure"><br>\
@@ -215,6 +218,7 @@ function show_results(){
     let departure = $('#departure').val();
     
     let is_date=(!departure=="")
+
     for(i=0;i<airports.length;i++){
          if(airport_names[i].toUpperCase()==to.toUpperCase()){
              to_id =airports[i].id;
@@ -231,14 +235,14 @@ function show_results(){
 		   success: (response) => {
                flight=response;
                if(is_date){
-               for(i=0;i<airports;i++){
-               if(!flight[i].departs_at.slice(0,10)==departure){
-                    flight.remove(flight[i]);
+                   b=flight.length;
+               for(i=0;i<b;i++){
+                   a = flight.shift();
+               if(a.departs_at.slice(0,10)==departure){
+                    flight.push(a);
                }
-               console.log(flight);
                }
            }
-           console.log(flight.length);
            fill_div(flight);
 
         },
@@ -254,10 +258,24 @@ function show_results(){
     }
     body.empty();
     function fill_div(flight){
-        body.append('<div id="flight_Title">Click to book</div>');
+        body.append('<div id="flight_Title">Book Your Flight...</div>');
         body.append('<div id="flight_div_holder"></div>');
         for(let i=0;i<flight.length;i++){
-            $('#flight_div_holder').append('<div id ="'+flight[i].id+'"class="flight_div">'+flight[i].number+'</div>');
+            $('#flight_div_holder').append('<div id ="'+flight[i].id+'"class="flight_div" flight='+flight[i]+'></div>');
+            $('#'+flight[i].id).append('<div id ="number'+flight[i].id+'"class="flight_number_div">Flight Number: '+flight[i].number+'</div>');
+            let date = flight[i].departs_at.slice(5,7)+"/"+flight[i].departs_at.slice(8,10)+"/"+flight[i].departs_at.slice(2,4);
+            $('#'+flight[i].id).append('<div id ="Date'+flight[i].id+'"class="flight_date_div">'+date+'</div>');
+            let airline = flight[i].info;
+            if(airline==""){
+                airline ="Jared";
+            }
+        
+            let departure_time = flight[i].departs_at.slice(11,19);
+            departure_time=convert_time(departure_time);
+            let arrival_time = flight[i].arrives_at.slice(11,19);
+            arrival_time = convert_time(arrival_time);
+            
+            $('#'+flight[i].id).append('<div id ="Time'+flight[i].id+'"class="flight_time_div">'+departure_time+" - "+arrival_time+'</div>');
         }
     }
 
@@ -367,4 +385,33 @@ function autocomplete(inp, arr) {
     document.addEventListener("click", function (e) {
         closeAllLists(e.target);
     });
+  }
+  function convert_time(time){
+
+    time = time.split(':'); // convert to array
+
+    // fetch
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+    var seconds = Number(time[2]);
+
+    // calculate
+    var timeValue;
+
+    if (hours > 0 && hours <= 12) {
+    timeValue= "" + hours;
+    } else if (hours > 12) {
+    timeValue= "" + (hours - 12);
+    } else if (hours == 0) {
+    timeValue= "12";
+    }
+    
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
+    timeValue += (seconds < 10) ? ":0" + seconds : ":" + seconds;  // get seconds
+    timeValue += (hours >= 12) ? " P.M." : " A.M.";  // get AM/PM
+    return timeValue.slice(0,4)+timeValue.slice(7,13);
+  }
+
+  function book_flight(flight_div){
+    
   }
