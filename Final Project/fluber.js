@@ -2,9 +2,13 @@ var root_url ="http://comp426.cs.unc.edu:3001/"
 var airports;
 var airport_names = [];
 var flight_num = 420;
+var login_name;
 $(document).ready(()=>{
     $(document).on("click",".login_button",function(){
         build_login_page();
+      });
+    $(document).on("click",".yuh_button",function(){
+        build_pilot_page();
       });
     $(document).on("click",".home_button",function(){
         build_home_page();
@@ -54,7 +58,7 @@ $(document).ready(()=>{
 
 
 })
-let login_name = "guest";
+login_name = "guest";
 let pilot_boolean = false;
 let logged_in = false;
 let log_label = "Log in";
@@ -268,9 +272,80 @@ function create_pilot_shit() {
     let d_time = $('.d_time')[0].value;
     let a_time = $('.a_time')[0].value;
     let d_date = $('.d_date')[0].value;
-    alert(d_date);
+    let depart_from = document.getElementById("from").value;
+    let arrive_to = document.getElementById("to").value;
+    let d_id = 0;
+    let a_id = 0;
+
+    for(i=0;i<airports.length;i++){
+        if(airport_names[i].toUpperCase()==arrive_to.toUpperCase()){
+            a_id =airports[i].id;
+        }
+        if(airport_names[i].toUpperCase()==depart_from.toUpperCase()){
+           d_id =airports[i].id;
+        }
+    }
+
+    $.ajax(root_url + '/flights',
+	       {
+		   type: 'POST',
+           xhrFields: {withCredentials: true},
+           data:{
+            "flight": {
+                "departs_at":   d_time,
+                "arrives_at":   a_time,
+                "number":       flight_num,
+                "departure_id": d_id,
+                "arrival_id":   a_id,
+                "info": login_name
+            },
+		   success: (response) => {
+               alert("it worked: " + d_id + ' ' + a_id);
+               create_confirm_pilot_flight_div();
+            },
+
+        },
+		   error: () => {
+		       alert('error');
+		   }
+    });
     
 }
+
+function create_confirm_pilot_flight_div() {
+    let d_pid = "ABC";
+    let a_pid = "123";
+    let d_time = $('.d_time')[0].value;
+    let a_time = $('.a_time')[0].value;
+    let d_date = $('.d_date')[0].value;
+    let depart_from = document.getElementById("from").value;
+    let arrive_to = document.getElementById("to").value;
+    for(i=0;i<airports.length;i++){
+        if(airport_names[i].toUpperCase()==arrive_to.toUpperCase()){
+            a_pid = airports[i].code;
+        }
+        if(airport_names[i].toUpperCase()==depart_from.toUpperCase()){
+           d_pid = airports[i].code;
+        }
+    }
+    body = $(".background_div");
+    body.empty();
+    $('body').append('<div class = background_div></div>');
+    $('.background_div').append('<div class = base_div_pilot></div>');
+    $('.base_div_pilot').append('<div class="">\
+    <div class = "title">Have a nice flight captain.</div><br>\
+    <div class = base_div_pilot2>\
+    <br><text class="depart_text2">Flight #'+flight_num+'</text><br><br>\
+    <text class="depart_text2">'+d_pid+' to '+a_pid+'</text><br>\
+    <text class="depart_text2">'+d_date+'</text><br>\
+    <text class="depart_text2">Depart: '+d_time+'</text><br>\
+    <text class="depart_text2">Arrive: '+a_time+'</text><br><br>\
+    <text class="depart_text2">Flight Confirmed.</text>\
+    </div>\
+    <br><button class = "yuh_button">Add Another Flight</button>\
+    </div>');
+}
+
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
