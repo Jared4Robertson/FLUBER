@@ -7,9 +7,10 @@ var First_Name;
 var Last_Name;
 var instances;
 var age;
+var yup;
+
 $(document).ready(()=>{
-    //PPKtPqkDVIQU9L3e4CnYvPpzTXejjpZI
-    // widget1 === widget2
+     yup   = document.getElementById('pop');
     $(document).on("click",".login_button",function(){
         build_login_page();
       });
@@ -76,6 +77,7 @@ function build_home_page (){
     $("body").empty();
     add_navbar();
     add_homepage();   
+    $("body").append(yup);
 }
 function build_passenger_page(){
     $('body').empty();
