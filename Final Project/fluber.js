@@ -278,6 +278,29 @@ function show_results(){
             $('#'+flight[i].id).append('<div id ="number'+flight[i].id+'"class="flight_number_div">Flight Number: '+flight[i].number+'</div>');
             let date = flight[i].departs_at.slice(5,7)+"/"+flight[i].departs_at.slice(8,10)+"/"+flight[i].departs_at.slice(2,4);
             $('#'+flight[i].id).append('<div id ="Date'+flight[i].id+'"class="flight_date_div">'+date+'</div>');
+            
+            let depart_from = flight[i].departure_id;
+            let arrive_to = flight[i].arrival_id;
+            let a_pid;
+            let d_pid;
+                for(j=0;j<airports.length;j++){
+                    if(airports[j].id==arrive_to){
+                          a_pid = airports[j].code;
+                        }
+                    if(airports[j].id==depart_from){
+                        d_pid = airports[j].code;
+                        }
+                    }
+        
+        
+            $('#'+flight[i].id).append('<div id ="Date'+flight[i].id+'"class="flight_from-to_div">'+d_pid+' to '+a_pid+'</div>');
+
+
+
+
+
+
+            //$('#'+flight[i].id).append('<div id ="Date'+flight[i].id+'"class="flight_date_div">'+flight[i].code+' to '+'</div>');
             let airline = flight[i].info;
             if(airline==""){
                 airline ="Jared";
@@ -511,7 +534,7 @@ function autocomplete(inp, arr) {
               "price_paid":   "290.11",
             },
     success: (response) => {
-        alert("it worked")
+        build_confirm_ticket(flight_div)
      },
 
  },
@@ -520,3 +543,28 @@ function autocomplete(inp, arr) {
     }
 });
   }
+function build_confirm_ticket(flight){
+    body = $(".background_div2");
+    body.empty();
+    $('body').append('<div class = background_div></div>');
+    $('.background_div2').append('<div class = base_div_pilot></div>');
+    $('.base_div_pilot').append('<div class="">\
+    <div class = "title">Booking Confirmed.</div><br>\
+    <div class = base_div_pass2>\
+    </div>\
+    <br><button class = "pass_log yup">Book Another Flight</button>\
+    </div>');
+    $(".base_div_pass2").append('<div class = "ticket"><strong>Ticket</strong><br>\
+        First Name:   '+first_name+'<br>\
+        Last Name:    '+last_name+'<br>\
+        Age:          '+age+'<br>\
+        Gender:       Male<br>\
+        Date:         '+$(flight).find( ".flight_date_div").text()+'<br>\
+        Time:         '+$(flight).find( ".flight_time_div").text()+'<br>\
+        '+$(flight).find( ".flight_number_div").text()+'<br>\
+        From-To:         '+$(flight).find( ".flight_from-to_div").text()+'<br>\
+        </div>');
+
+
+
+}
