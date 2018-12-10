@@ -389,12 +389,18 @@ function create_pilot_shit() {
 		       alert('error');
 		   }
     });
+
+
     
 }
 
 function create_confirm_pilot_flight_div() {
     let d_pid = "ABC";
     let a_pid = "123";
+    let d_lat = 0;
+    let d_long = 0;
+    let a_lat = 0;
+    let a_long = 0;
     let d_time = $('.d_time')[0].value;
     let a_time = $('.a_time')[0].value;
     let d_date = $('.d_date')[0].value;
@@ -403,11 +409,16 @@ function create_confirm_pilot_flight_div() {
     for(i=0;i<airports.length;i++){
         if(airport_names[i].toUpperCase()==arrive_to.toUpperCase()){
             a_pid = airports[i].code;
+            a_lat = airports[i].latitude;
+            a_long = airports[i].longitude;
         }
         if(airport_names[i].toUpperCase()==depart_from.toUpperCase()){
-           d_pid = airports[i].code;
+            d_pid = airports[i].code;
+            d_lat = airports[i].latitude;
+            d_long = airports[i].longitude;
         }
     }
+    alert("lat: "+a_lat + ',  long: ' + a_long);
     body = $(".background_div");
     body.empty();
     $('body').append('<div class = background_div></div>');
@@ -419,7 +430,7 @@ function create_confirm_pilot_flight_div() {
     <text class="depart_text2">'+d_pid+' to '+a_pid+'</text><br>\
     <text class="depart_text2">'+d_date+'</text><br>\
     <text class="depart_text2">Depart: '+d_time+'</text><br>\
-    <text class="depart_text2">Arrive: '+a_time+'</text><br><br>\
+    <text class="depart_text2">Arrive: '+a_time+'</text><br>\
     <text class="depart_text2">Flight Confirmed.</text>\
     </div>\
     <br><button class = "yuh_button">Add Another Flight</button>\
