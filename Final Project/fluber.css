@@ -139,6 +139,18 @@ body{
     Color: white;
     
 }
+.base_div_pilot2{
+    width: 60%;
+    height: 30vh;
+    margin-left: 75px;
+    background-color: white;
+    border-top-width: 30px;
+    border-radius: 10px;
+    opacity: .9;
+    text-align: left;
+    Color: black;
+    float: left;
+}
 .base_div_passenger{
     width: 70%;
     height: 50vh;
@@ -206,11 +218,13 @@ body{
 .depart_text{
     margin-left: 25px;
     margin-right: 25px;
+    color: white;
 }
-
-
-
-  
+.depart_text2{
+    margin-left: 25px;
+    margin-right: 25px;
+    color: black;
+}
   .autocomplete-items div {
     color: black;  
     padding: 10px;
@@ -323,5 +337,17 @@ body{
     height: 10vh;
     font-size: 25px;
     float: left;
-    margin:0;
+    margin:0;}
+
+  .yuh_button{
+    margin-top: 10px;
+    width: 10vw;
+    height: 30px;
+    color:black;
+    background-color: blue;
+    border-width: 0ch;
+    font-size: 20;
+    border-radius: 10px;
+    margin-left: 3vw;
+    bottom: 75px;
 }
