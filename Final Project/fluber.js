@@ -1,7 +1,7 @@
 var root_url ="http://comp426.cs.unc.edu:3001/"
 var airports;
 var airport_names = [];
-var flight_num = 420;
+var flight_num = 420420;
 var login_name;
 var First_Name;
 var Last_Name;
@@ -9,6 +9,7 @@ var instances;
 var flights;
 var age;
 var yup;
+var existing_flight_num;
 
 $(document).ready(()=>{
      yup   = document.getElementById('pop');
@@ -390,6 +391,7 @@ function create_pilot_shit() {
     let d_id = 0;
     let a_id = 0;
     let bool = false;
+    let existing_flight_id;
 
     for(i=0;i<airports.length;i++){
         if(airport_names[i].toUpperCase()==arrive_to.toUpperCase()){
@@ -406,31 +408,40 @@ function create_pilot_shit() {
                 if (flights[i].departure_id == d_id) {
                     if (flights[i].arrival_id == a_id) {
                         bool = true;
+                        existing_flight_id=flights[i].id;
+                        existing_flight_num=flights[i].number;
                     }
                 }
             }
         }
     }
     if (bool) {
-        alert('flight already exists');
         $.ajax(root_url + '/instances',
         {
             type: 'POST',
             xhrFields: {withCredentials: true},
             data:{
-                "instance": {
-                  "flight_id": 1,
-                  "date":      "2018-12-21"
-                },
+                "instance":
+                {"flight_id":existing_flight_id,
+                "date":d_date,
+                "is_cancelled":true,
+                "info":null,"user_id":null,
+                "created_at":null,
+                "updated_at":null
+                }
+
+            
+            },
                 success: (response) => {
                     create_confirm_pilot_flight_div();
                 },
-            },
             error: () => {
                 alert('this error');
             }
          });
-    } else {
+    
+    }
+    else {
         $.ajax(root_url + '/flights',
 	       {
 		   type: 'POST',
@@ -443,35 +454,48 @@ function create_pilot_shit() {
                 "departure_id": d_id,
                 "arrival_id":   a_id,
                 "info": "Captain " + login_name
-            },
+            }},
 		   success: (response) => {
+               create_instance(response,d_date);
                create_confirm_pilot_flight_div();
+               
             },
-
-        },
 		   error: () => {
 		       alert('that error');
 		   }
         });
-        $.ajax(root_url + '/instances',
+        
+    }
+}
+function create_instance(response,d_date){
+    $.ajax(root_url + '/instances',
 	        {
 		    type: 'POST',
             xhrFields: {withCredentials: true},
+
             data:{
-            "instance": {
-                "flight_id": flight_num,
-                "date": d_date
-            }
+                "instance":
+                {
+                "flight_id":response.id,
+                "date":d_date,
+                "is_cancelled":true,
+                "info":null,"user_id":null,
+                "created_at":null,
+                "updated_at":null
+                }
+
+            
             },
 		    success: (response) => {
+                existing_flight_num=flight_num;
+                flight_num++;
+                
             },
 		    error: () => {
 		        alert('those error');
 		    }
         });
-    }
 }
-
 function create_confirm_pilot_flight_div() {
     let d_pid = "ABC";
     let a_pid = "123";
@@ -496,6 +520,7 @@ function create_confirm_pilot_flight_div() {
             // d_long = airports[i].longitude;
         }
     }
+
     body = $(".background_div");
     body.empty();
     $('body').append('<div class = background_div></div>');
@@ -503,7 +528,7 @@ function create_confirm_pilot_flight_div() {
     $('.base_div_pilot').append('<div class="">\
     <div class = "title">Have a nice flight captain.</div><br>\
     <div class = base_div_pilot2>\
-    <br><text class="depart_text2">Flight #'+flight_num+'</text><br><br>\
+    <br><text class="depart_text2">Flight #'+existing_flight_num+'</text><br><br>\
     <text class="depart_text2">'+d_pid+' to '+a_pid+'</text><br>\
     <text class="depart_text2">'+d_date+'</text><br>\
     <text class="depart_text2">Depart: '+d_time+'</text><br>\
