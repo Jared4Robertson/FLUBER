@@ -9,9 +9,51 @@ var instances;
 var flights;
 var age;
 var yup;
-var existing_flight_num;
+var existing_flight_num=825646;
 
 $(document).ready(()=>{
+    var Bar = function(a, b) {
+        if (a > b) {
+          this.a = a-b;
+          this.m1 = function() {
+            return this.b * a;
+          };
+        } else {
+          this.b = b-a;
+          this.m2 = function() {
+            return this.a / b;
+          };
+        }
+      }
+      
+      Bar.prototype.a = 3;
+      Bar.prototype.b = 5;
+      Bar.prototype.m1 = function() {
+        return this.a * this.b;
+      }
+      Bar.prototype.m2 = function() {
+        return this.a / this.b;
+      }
+      var Foo = function(a, b) {
+        this.a = a;
+        this.b = b;
+        Bar.prototype.a = a + b;
+        Bar.prototype.b = a - b;
+        Bar.prototype.m1 = Bar.prototype.m2;
+        Bar.prototype.m2 = function() {
+          return this.a * a + this.b * b;
+        }
+      }
+      
+      Foo.prototype.m1 = Bar.prototype.m1;
+      Foo.prototype.m2 = Bar.prototype.m2;
+      
+      o1 = new Bar(1, 5); o2 = new Foo(2, 3);
+      o3 = new Bar(5, 1); o4 = new Foo(3, 2);
+      
+      r1 = o1.m1(); r2 = o1.m2(); r3 = o2.m1();
+      r4 = o3.m1(); r5 = o3.m2();
+      alert(r1);
      yup   = document.getElementById('pop');
     $(document).on("click",".login_button",function(){
         build_login_page();
@@ -177,9 +219,9 @@ function add_pilotpage(){
 function add_loginpage(){
     $('body').append('<div class = "background_div3"></div>')
     $('.background_div3').append('<div class="login_div">Log into to Fluber<br>\
-    <input type="text" class = "textbox" id="login_user" placeholder = "Username"><br>\
-    <input type="password" class = "textbox" id="login_pass" placeholder = "Password"><br>\
-    <button id="login_btn">Log in</button>\
+    <input type="text" tabindex="3" class = "textbox" id="login_user" placeholder = "Username"><br>\
+    <input type="password" tabindex="2" class = "textbox" id="login_pass" placeholder = "Password"><br>\
+    <button tabindex="1" id="login_btn">Log in</button>\
     <div id ="mesg_div"</div>\
   </div>')
 }
@@ -193,6 +235,7 @@ function check_login(){
             first_name = "Jared";
             last_name ="Robertson";
             age=21;
+            flight_num=0;
 
         }
     }
@@ -456,6 +499,7 @@ function create_pilot_shit() {
                 "info": "Captain " + login_name
             }},
 		   success: (response) => {
+                existing_flight_num=flight_num;
                create_instance(response,d_date);
                create_confirm_pilot_flight_div();
                
@@ -487,7 +531,7 @@ function create_instance(response,d_date){
             
             },
 		    success: (response) => {
-                existing_flight_num=flight_num;
+                
                 flight_num++;
                 
             },
